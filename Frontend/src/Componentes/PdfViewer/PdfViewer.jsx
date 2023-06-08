@@ -13,100 +13,21 @@ export function PdfViewer({ prop }) {
 
     const [numPages, setNumPages] = useState(null);
     const [bookmark, setBookmark] = useState();
-    const [lengthArr,setLengthArr] = useState();
     const [pageNumber, setPageNumber] = useState();
     const [catPage, setCatPage] = useState([]);
-    const chrg = useRef(null);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
     };
-
+    //Colocar en width del componente Page como el porcentaje del que lo contiene
     useEffect(() => {
         setPageNumber(bookmark);
-        
-        if(bookmark < 5){ chrg.current = bookmark - 1 }else if(bookmark % 2 === 0){
-            chrg.current = 5;
-        }else{
-            chrg.current = 4;
-        };
-        
-        const initialArray = [];
 
-        for (let i = 0; i < 10; i++) {
-            initialArray.push(<Page
-                className={"pagePdf"}
-                pageNumber={((bookmark-chrg.current) + i)}
-                width={560}
-            />);
+        for (let i = 0; i < 50/*numPages*/; i++) {
+            catPage.push(<div className="pag"/>);
         }
-        setLengthArr(10);
-        setCatPage(initialArray);
 
     },[bookmark]);
-    
-    function previousPage() {
-        var newPages = 4;
-        const nPage = bookmark - lengthArr + chrg.current - 1;
-        //const nPage = pageNumber - chrg.current - 1;
-        const item = document.querySelector('.pagesContainer');
-
-        var posX = (parseFloat(item.style.left));
-        if(pageNumber<5) newPages = pageNumber - 1;
-        if((pageNumber === 0) || (pageNumber === -1)){
-            return;
-        }else if(posX === 0){
-            item.style.transition = '0ms';
-            const array = catPage;
-            console.log("Numero página: "+nPage);
-            for (let i = 0; i < newPages; i++) {
-                array.unshift(<Page
-                    className={"pagePdf"}
-                    pageNumber={nPage - i}
-                    width={560}
-                />);
-            }
-            setCatPage(array);
-            setLengthArr(lengthArr + 4);
-            item.style.left = (posX - 100) + "%";
-            setPageNumber(pageNumber-2);
-        }else{
-            item.style.left = (posX + 100) + "%";
-            setPageNumber(pageNumber-2);
-            item.style.transition = '1000ms';
-        }
-        console.log("viendo: "+pageNumber);
-    }
-    
-    function nextPage() {
-        var newPages = 4;
-        const nPage = bookmark + lengthArr - chrg.current + 1;
-        const item = document.querySelector('.pagesContainer');
-        var posX = (parseFloat(item.style.left));
-
-        if(pageNumber>(numPages-5)) newPages = pageNumber - 1;
-
-        if((pageNumber === numPages) || (pageNumber === numPages+1)){
-            return;
-        }else if(-posX >= (parseInt(lengthArr/2)-2)*100){
-            item.style.left = (posX - 100) + "%";
-            setPageNumber(pageNumber+2);
-            const array = catPage;
-            for (let i = 0; i < newPages; i++) {
-                array.push(<Page
-                    className={"pagePdf"}
-                    pageNumber={nPage + i}
-                    width={560}
-                />);
-            }
-            setCatPage(array);
-            setLengthArr(lengthArr + 4);
-        }else{
-            item.style.left = (posX - 100) + "%";
-            setPageNumber(pageNumber+2);
-            item.style.transition = '1000ms';
-        }
-    } 
 
     /*------------------------------------------*/
     return (
@@ -119,22 +40,22 @@ export function PdfViewer({ prop }) {
                 />
 
                 {bookmark && <div className='pagesContainer'
-                    style={ bookmark < 5 ? { left: '0%' } : {left: '-200%'}}>
+                    /*style={ bookmark < 5 ? { left: '0%' } : {left: '-200%'}}*/>
                     {
-                        catPage.map((paginasR, index) => (
+                        catPage.map((paginas, index) => (
                             <div className='d-flex' key={index}>
-                                {paginasR}
+                                {paginas}
                             </div>
                         ))
                     }
                 </div>}
 
-                {<button onClick={previousPage} className="prevPdf">
+                {<button /*onClick={previousPage}*/ className="prevPdf">
                     <i className="bi bi-arrow-left-circle-fill"></i>
                 </button>}
 
                 {
-                <button onClick={nextPage} className="nextPdf">
+                <button /*onClick={nextPage}*/ className="nextPdf">
                     <i className="bi bi-arrow-right-circle-fill"></i>
                 </button>}
 
